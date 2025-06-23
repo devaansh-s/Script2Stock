@@ -190,12 +190,15 @@ function App() {
           
                         <div className="flex flex-wrap gap-2 items-center justify-end min-w-[200px]">
                           <button
-                            onClick={() => navigator.clipboard.writeText(keywordsOnly)}
-                            className="p-2 rounded-md hover:bg-blue-500/30 border border-blue-300/20 transition-all text-white"
+                            onClick={() => {
+                              navigator.clipboard.writeText(keywordsOnly);
+                            }}
+                            className="p-2 rounded-md border border-blue-300/20 transition-all text-white bg-blue-500/20 hover:bg-blue-500/40 hover:scale-110 active:scale-95 shadow-sm hover:shadow-blue-500/30"
                             title="Copy"
                           >
                             <Copy className="w-4 h-4" />
                           </button>
+
           
                           <select
                             className="text-black text-xs bg-blue/10 border border-white/20 rounded-md px-2 py-1 backdrop-blur-sm"
