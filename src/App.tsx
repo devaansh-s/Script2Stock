@@ -195,7 +195,7 @@ function App() {
                           </button>
           
                           <select
-                            className="text-white text-xs bg-white/10 border border-white/20 rounded-md px-2 py-1 backdrop-blur-sm"
+                            className="text-white text-xs bg-blue/10 border border-white/20 rounded-md px-2 py-1 backdrop-blur-sm"
                             value={selectedPlatform}
                             onChange={(e) => handlePlatformChange(e.target.value)}
                           >
@@ -208,7 +208,7 @@ function App() {
                             href={platformUrls[selectedPlatform]}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-white text-xs bg-yellow-500/20 hover:bg-yellow-500/40 px-3 py-1 rounded-md border border-yellow-300/20 transition-all"
+                            className="text-white text-xs bg-pink-500/20 hover:bg-yellow-500/40 px-3 py-1 rounded-md border border-yellow-300/20 transition-all"
                           >
                             🔍 Search
                           </a>
