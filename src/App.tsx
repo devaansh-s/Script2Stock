@@ -144,7 +144,6 @@ function App() {
                     {results.split('\n').map((line, idx) => {
                       const keywordsOnly = line.split(']').slice(1).join(']').trim();
                       const encodedSearch = encodeURIComponent(keywordsOnly);
-                      const searchUrl = `https://www.storyblocks.com/all-video/search/${encodedSearch}?search-origin=search_bar`;
 
                       return (
                         <div
@@ -152,20 +151,39 @@ function App() {
                           className="flex flex-col md:flex-row md:justify-between md:items-center bg-white/10 px-4 py-3 rounded-xl border border-white/10 gap-2"
                         >
                           <span className="text-green-300 font-mono text-sm break-words">{line}</span>
-                          <div className="flex gap-2">
+                          <div className="flex gap-2 flex-wrap">
                             <button
                               onClick={() => navigator.clipboard.writeText(keywordsOnly)}
                               className="text-white text-xs bg-blue-500/20 hover:bg-blue-500/40 px-3 py-1 rounded-md border border-blue-300/20 transition-all"
                             >
                               📋 Copy
                             </button>
+
                             <a
-                              href={searchUrl}
+                              href={`https://www.storyblocks.com/all-video/search/${encodedSearch}?search-origin=search_bar`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="text-white text-xs bg-yellow-500/20 hover:bg-yellow-500/40 px-3 py-1 rounded-md border border-yellow-300/20 transition-all"
                             >
-                              🔍 Search
+                              🎞️ Storyblocks
+                            </a>
+
+                            <a
+                              href={`https://www.pexels.com/search/videos/${encodedSearch}/`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-white text-xs bg-green-500/20 hover:bg-green-500/40 px-3 py-1 rounded-md border border-green-300/20 transition-all"
+                            >
+                              📽️ Pexels
+                            </a>
+
+                            <a
+                              href={`https://pixabay.com/videos/search/${encodedSearch}/`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-white text-xs bg-red-500/20 hover:bg-red-500/40 px-3 py-1 rounded-md border border-red-300/20 transition-all"
+                            >
+                              🎬 Pixabay
                             </a>
                           </div>
                         </div>
