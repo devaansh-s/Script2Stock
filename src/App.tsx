@@ -182,7 +182,8 @@ function App() {
                     return (
                       <div
                         key={idx}
-                        className="flex flex-col md:flex-row md:justify-between md:items-center bg-white/10 px-4 py-3 rounded-xl border border-white/10 gap-4"
+                        className="flex flex-col md:flex-row md:justify-between md:items-center bg-white/10 px-4 py-3 rounded-xl border border-white/10 gap-2 animate-fade-slide-up"
+                        style={{ animationDelay: `${idx * 100}ms` }}
                       >
                         <div className="flex-1 text-purple-300 font-mono text-sm break-words min-w-0">
                           {line}
