@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Film, Sparkles, Clock, Copy } from 'lucide-react';
-import { Button } from "./components/Button"; // adjust path if needed
+import { Button } from "./components/Button";
+import { ParticleButton } from "@/components/ui/particle-button";
+
 
 
 function App() {
@@ -135,7 +137,7 @@ function App() {
                 </select>
               </div>
 
-              <Button
+              <ParticleButton
                 onClick={handleGenerate}
                 disabled={isGenerating}
                 variant="default"
@@ -149,7 +151,7 @@ function App() {
                 ) : (
                   <>🎬 Generate Keywords</>
                 )}
-              </Button>
+              </ParticleButton>
 
 
 
