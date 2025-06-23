@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Film, Sparkles, Clock, Copy } from 'lucide-react';
+import { Button } from "./components/Button"; // adjust path if needed
+
 
 function App() {
   const [script, setScript] = useState('');
@@ -133,24 +135,21 @@ function App() {
                 </select>
               </div>
 
-              <button
+              <Button
                 onClick={handleGenerate}
                 disabled={isGenerating}
-                className={`w-full md:w-auto mx-auto block px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-2xl shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none ${
-                  !isGenerating ? 'animate-pulse hover:animate-none' : ''
-                }`}
+                variant="default"
+                size="lg"
               >
-                <span className="flex items-center justify-center gap-2 text-lg">
-                  {isGenerating ? (
-                    <>
-                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      Generating...
-                    </>
-                  ) : (
-                    <>🎬 Generate Keywords</>
-                  )}
-                </span>
-              </button>
+                {isGenerating ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
+                    Generating...
+                  </>
+                ) : (
+                  <>🎬 Generate Keywords</>
+                )}
+              </Button>
 
 
 
