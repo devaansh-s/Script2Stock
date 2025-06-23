@@ -7,6 +7,7 @@ function App() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [platformSelections, setPlatformSelections] = useState<string[]>([]);
 
   useEffect(() => {
     setTimeout(() => setIsLoaded(true), 100);
@@ -38,6 +39,7 @@ function App() {
       }
 
       setResults(data.keywords);
+      setPlatformSelections(Array(data.keywords.split('\n').length).fill('storyblocks'));
       setShowResults(true);
     } catch (error: any) {
       console.error("Error generating keywords:", error);
@@ -58,7 +60,7 @@ function App() {
       />
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
 
-      {/* Animated Lights */}
+      {/* Lights */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-2 h-2 bg-blue-400/30 rounded-full animate-pulse" />
         <div className="absolute top-40 right-20 w-3 h-3 bg-purple-400/20 rounded-full animate-bounce" style={{ animationDelay: '1s' }} />
@@ -144,6 +146,19 @@ function App() {
                     {results.split('\n').map((line, idx) => {
                       const keywordsOnly = line.split(']').slice(1).join(']').trim();
                       const encodedSearch = encodeURIComponent(keywordsOnly);
+                      const selectedPlatform = platformSelections[idx] || 'storyblocks';
+
+                      const platformUrls: Record<string, string> = {
+                        storyblocks: `https://www.storyblocks.com/all-video/search/${encodedSearch}?search-origin=search_bar`,
+                        pexels: `https://www.pexels.com/search/videos/${encodedSearch}/`,
+                        pixabay: `https://pixabay.com/videos/search/${encodedSearch}/`,
+                      };
+
+                      const handlePlatformChange = (newPlatform: string) => {
+                        const updatedSelections = [...platformSelections];
+                        updatedSelections[idx] = newPlatform;
+                        setPlatformSelections(updatedSelections);
+                      };
 
                       return (
                         <div
@@ -151,7 +166,7 @@ function App() {
                           className="flex flex-col md:flex-row md:justify-between md:items-center bg-white/10 px-4 py-3 rounded-xl border border-white/10 gap-2"
                         >
                           <span className="text-green-300 font-mono text-sm break-words">{line}</span>
-                          <div className="flex gap-2 flex-wrap">
+                          <div className="flex flex-col md:flex-row gap-2 items-center">
                             <button
                               onClick={() => navigator.clipboard.writeText(keywordsOnly)}
                               className="text-white text-xs bg-blue-500/20 hover:bg-blue-500/40 px-3 py-1 rounded-md border border-blue-300/20 transition-all"
@@ -159,31 +174,23 @@ function App() {
                               📋 Copy
                             </button>
 
+                            <select
+                              className="text-white text-xs bg-white/10 border border-white/20 rounded-md px-2 py-1 backdrop-blur-sm"
+                              value={selectedPlatform}
+                              onChange={(e) => handlePlatformChange(e.target.value)}
+                            >
+                              <option value="storyblocks">🎞️ Storyblocks</option>
+                              <option value="pexels">📽️ Pexels</option>
+                              <option value="pixabay">🎬 Pixabay</option>
+                            </select>
+
                             <a
-                              href={`https://www.storyblocks.com/all-video/search/${encodedSearch}?search-origin=search_bar`}
+                              href={platformUrls[selectedPlatform]}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="text-white text-xs bg-yellow-500/20 hover:bg-yellow-500/40 px-3 py-1 rounded-md border border-yellow-300/20 transition-all"
                             >
-                              🎞️ Storyblocks
-                            </a>
-
-                            <a
-                              href={`https://www.pexels.com/search/videos/${encodedSearch}/`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-white text-xs bg-green-500/20 hover:bg-green-500/40 px-3 py-1 rounded-md border border-green-300/20 transition-all"
-                            >
-                              📽️ Pexels
-                            </a>
-
-                            <a
-                              href={`https://pixabay.com/videos/search/${encodedSearch}/`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-white text-xs bg-red-500/20 hover:bg-red-500/40 px-3 py-1 rounded-md border border-red-300/20 transition-all"
-                            >
-                              🎬 Pixabay
+                              🔍 Search
                             </a>
                           </div>
                         </div>
@@ -194,7 +201,7 @@ function App() {
               </div>
             )}
 
-            {/* Feature Section */}
+            {/* Features */}
             <div className="relative z-10 mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
                 { icon: <Clock className="w-6 h-6 text-blue-300" />, title: "Timestamped", desc: "Keywords matched to specific moments in your script" },
@@ -208,7 +215,6 @@ function App() {
                 </div>
               ))}
             </div>
-
           </div>
         </div>
       </div>
