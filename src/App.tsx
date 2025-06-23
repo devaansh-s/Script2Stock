@@ -137,22 +137,25 @@ function App() {
                 </select>
               </div>
 
-              <ParticleButton
-                onClick={handleGenerate}
-                disabled={isGenerating}
-                variant="default"
-                size="lg"
-                className="mx-auto block bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-2xl shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-              >
-                {isGenerating ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
-                    Generating...
-                  </>
-                ) : (
-                  <>🎬 Generate Keywords</>
-                )}
-              </ParticleButton>
+              <div className="flex justify-center">
+                <ParticleButton
+                  onClick={handleGenerate}
+                  disabled={isGenerating}
+                  variant="default"
+                  size="lg"
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-2xl shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                >
+                  {isGenerating ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
+                      Generating...
+                    </>
+                  ) : (
+                    <>🎬 Generate Keywords</>
+                  )}
+                </ParticleButton>
+              </div>
+
 
 
 
