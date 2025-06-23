@@ -195,7 +195,7 @@ function App() {
                           </button>
           
                           <select
-                            className="text-white text-xs bg-blue/10 border border-white/20 rounded-md px-2 py-1 backdrop-blur-sm"
+                            className="text-black text-xs bg-blue/10 border border-white/20 rounded-md px-2 py-1 backdrop-blur-sm"
                             value={selectedPlatform}
                             onChange={(e) => handlePlatformChange(e.target.value)}
                           >
