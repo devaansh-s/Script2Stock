@@ -136,9 +136,9 @@ function App() {
               <button
                 onClick={handleGenerate}
                 disabled={isGenerating}
-                className={w-full md:w-auto mx-auto block px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-2xl shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none ${
+                className={`w-full md:w-auto mx-auto block px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-2xl shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none ${
                   !isGenerating ? 'animate-pulse hover:animate-none' : ''
-                }}
+                }`}
               >
                 <span className="flex items-center justify-center gap-2 text-lg">
                   {isGenerating ? (
@@ -151,6 +151,7 @@ function App() {
                   )}
                 </span>
               </button>
+
 
 
 
