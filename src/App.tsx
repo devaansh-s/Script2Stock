@@ -184,7 +184,7 @@ function App() {
                           key={idx}
                           className="flex flex-col md:flex-row md:justify-between md:items-center bg-white/10 px-4 py-3 rounded-xl border border-white/10 gap-2"
                         >
-                          <span className="text-green-300 font-mono text-sm break-words">{line}</span>
+                          <span className="text-purple-300 font-mono text-sm break-words">{line}</span>
                           <div className="flex flex-col md:flex-row gap-2 items-center">
                             <button
                               onClick={() => navigator.clipboard.writeText(keywordsOnly)}
