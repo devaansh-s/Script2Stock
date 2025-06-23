@@ -8,6 +8,7 @@ function App() {
   const [showResults, setShowResults] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [platformSelections, setPlatformSelections] = useState<string[]>([]);
+  const [overlayFrequency, setOverlayFrequency] = useState<'low' | 'medium' | 'high'>('medium'); // default medium
 
   useEffect(() => {
     setTimeout(() => setIsLoaded(true), 100);
@@ -29,7 +30,10 @@ function App() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ script }),
+        body: JSON.stringify({ 
+          script, 
+          overlayFrequency, // send frequency to backend
+        }),
       });
 
       const data = await response.json();
@@ -112,6 +116,21 @@ function App() {
                 <div className="absolute top-4 right-4">
                   <Clock className="w-5 h-5 text-white/40" />
                 </div>
+              </div>
+
+              {/* Overlay Frequency Selector */}
+              <div className="flex items-center gap-4 text-white font-medium">
+                <label htmlFor="overlay-frequency" className="whitespace-nowrap">Overlay Frequency:</label>
+                <select
+                  id="overlay-frequency"
+                  value={overlayFrequency}
+                  onChange={(e) => setOverlayFrequency(e.target.value as 'low' | 'medium' | 'high')}
+                  className="bg-white/10 border border-white/30 rounded-md px-3 py-2 backdrop-blur-sm text-white"
+                >
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                </select>
               </div>
 
               <button
