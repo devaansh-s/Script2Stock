@@ -51,25 +51,25 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* 🔮 3D Chrome Grid Background */}
+    <div className="relative w-full min-h-screen overflow-hidden bg-black">
+      {/* 🧊 ChromeGrid Background */}
       <div className="absolute inset-0 z-0">
         <ChromeGrid />
       </div>
 
-      {/* Optional overlay tint */}
-      <div className="absolute inset-0 bg-black/40 z-0 pointer-events-none" />
+      {/* Overlay Tint */}
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-10 pointer-events-none" />
 
-      {/* Glowing lights */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+      {/* Glowing Lights */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-20">
         <div className="absolute top-20 left-10 w-2 h-2 bg-blue-400/30 rounded-full animate-pulse" />
         <div className="absolute top-40 right-20 w-3 h-3 bg-purple-400/20 rounded-full animate-bounce" style={{ animationDelay: '1s' }} />
         <div className="absolute bottom-32 left-1/4 w-1 h-1 bg-pink-400/40 rounded-full animate-ping" style={{ animationDelay: '2s' }} />
         <div className="absolute top-1/3 right-1/3 w-2 h-2 bg-cyan-400/25 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }} />
       </div>
 
-      {/* 🌟 Main Content */}
-      <div className="relative z-10 min-h-screen flex items-center justify-center p-4">
+      {/* Main UI */}
+      <div className="relative z-30 min-h-screen flex items-center justify-center p-4">
         <div className={`w-full max-w-4xl transition-all duration-1000 ease-out ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-3xl shadow-2xl p-8 md:p-12 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-3xl" />
@@ -198,7 +198,7 @@ function App() {
               )}
             </div>
 
-            {/* Feature Cards */}
+            {/* Features */}
             <div className="relative z-10 mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
                 { icon: <Clock className="w-6 h-6 text-blue-300" />, title: "Timestamped", desc: "Keywords matched to specific moments in your script" },
