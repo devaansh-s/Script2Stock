@@ -154,7 +154,7 @@ function App() {
             </div>
 
             {/* Results */}
-          {showResults && (
+         {showResults && (
             <div className="relative z-10 mt-8 transition-all duration-500 ease-out opacity-100 translate-y-0">
               <div className="bg-black border border-white/10 rounded-2xl p-6">
                 <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
@@ -182,10 +182,13 @@ function App() {
                     return (
                       <div
                         key={idx}
-                        className="flex flex-col md:flex-row md:justify-between md:items-center bg-white/10 px-4 py-3 rounded-xl border border-white/10 gap-2"
+                        className="flex flex-col md:flex-row md:justify-between md:items-center bg-white/10 px-4 py-3 rounded-xl border border-white/10 gap-4"
                       >
-                        <span className="text-purple-300 font-mono text-sm break-words">{line}</span>
-                        <div className="flex flex-wrap gap-2 items-center justify-end">
+                        <div className="flex-1 text-purple-300 font-mono text-sm break-words min-w-0">
+                          {line}
+                        </div>
+          
+                        <div className="flex flex-wrap gap-2 items-center justify-end min-w-[200px]">
                           <button
                             onClick={() => navigator.clipboard.writeText(keywordsOnly)}
                             className="p-2 rounded-md hover:bg-blue-500/30 border border-blue-300/20 transition-all text-white"
@@ -220,6 +223,7 @@ function App() {
               </div>
             </div>
           )}
+
 
 
             {/* Features */}
