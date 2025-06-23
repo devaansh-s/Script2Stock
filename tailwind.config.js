@@ -1,5 +1,7 @@
+import { with21st } from '@21stdev/tailwind';
+
 /** @type {import('tailwindcss').Config} */
-export default {
+export default with21st({
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
@@ -15,4 +17,4 @@ export default {
     },
   },
   plugins: [],
-};
+});
