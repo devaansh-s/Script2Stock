@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Film, Sparkles, Clock, Copy } from 'lucide-react';
 import { ParticleButton } from "@/components/ui/particle-button";
-import { ChromeGrid } from "@/components/ui/chromegrid"; // Adjust path if needed
+import { ChromeGrid } from "@/components/ui/ChromeGrid";
 
 function App() {
   const [script, setScript] = useState('');
