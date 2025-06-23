@@ -59,7 +59,7 @@ function App() {
       <div
         className="absolute inset-0 bg-cover bg-center bg-fixed"
         style={{
-          backgroundImage: 'url(https://images.pexels.com/photos/11167645/pexels-photo-11167645.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop)',
+          backgroundImage: 'url(https://images.pexels.com/photos/1936741/pexels-photo-1936741.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop)',
         }}
       />
       <div className="absolute inset-0 bg-black/40 backdrop-blur-none" />
