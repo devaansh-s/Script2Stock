@@ -62,7 +62,7 @@ function App() {
           backgroundImage: 'url(https://images.pexels.com/photos/11167645/pexels-photo-11167645.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop)',
         }}
       />
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
 
       {/* Lights */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
