@@ -8,7 +8,7 @@ function App() {
   const [showResults, setShowResults] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [platformSelections, setPlatformSelections] = useState<string[]>([]);
-  const [overlayFrequency, setOverlayFrequency] = useState<'low' | 'medium' | 'high'>('medium'); // default medium
+  const [overlayFrequency, setOverlayFrequency] = useState<'low' | 'medium' | 'high'>('medium');
 
   useEffect(() => {
     setTimeout(() => setIsLoaded(true), 100);
@@ -32,7 +32,7 @@ function App() {
         },
         body: JSON.stringify({ 
           script, 
-          overlayFrequency, // send frequency to backend
+          overlayFrequency,
         }),
       });
 
