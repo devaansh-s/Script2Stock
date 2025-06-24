@@ -95,7 +95,7 @@ function App() {
               disabled={isGenerating}
               variant="default"
               size="lg"
-              className="bg-white/10 border border-white/30 hover:bg-white/20 text-white font-medium rounded-xl shadow-md transition-all duration-300 px-6 py-2"
+              className="bg-black/10 border border-black/30 hover:bg-white/20 text-white font-medium rounded-xl shadow-md transition-all duration-300 px-6 py-2"
             >
               {isGenerating ? (
                 <>
