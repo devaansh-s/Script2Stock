@@ -93,7 +93,6 @@ function App() {
             <ParticleButton
               onClick={handleGenerate}
               disabled={isGenerating}
-              variant="default"
               size="lg"
               className="bg-black bg-opacity-80 hover:bg-opacity-100 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 px-6 py-2 border border-white/10 backdrop-blur-sm"
             >
