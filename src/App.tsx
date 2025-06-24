@@ -60,11 +60,11 @@ function App() {
         <ChromeGrid pointer={pointer} />
       </div>
 
-      <div className="absolute z-10 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 pointer-events-none flex flex-col justify-center items-center text-center px-4">
+      <div className="absolute z-10 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 pointer-events-none flex flex-col justify-center items-center">
         <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 pointer-events-none">
           Script2Stock
         </h1>
-        <p className="text-sm md:text-base text-white/70 font-mono tracking-wide pointer-events-none mb-6 max-w-md">
+        <p className="text-sm md:text-base text-white/70 font-mono tracking-wide pointer-events-none">
           Turn Video Scripts into Stock Footage Keywords
         </p>
         <div className="w-full max-w-2xl pointer-events-auto">
