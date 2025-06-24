@@ -80,7 +80,7 @@ function App() {
           Script2Stock
         </h1>
         <p className="text-sm md:text-base text-white/70 font-mono tracking-wide pointer-events-none mb-6 text-center max-w-md">
-          Turn Video Scripts into Stock Footage Keywords
+          Video Scripts to Stock Footage Keywords
         </p>
         <div className="w-full max-w-2xl pointer-events-auto">
           <textarea
