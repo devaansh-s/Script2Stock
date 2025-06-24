@@ -94,7 +94,7 @@ function App() {
               onClick={handleGenerate}
               disabled={isGenerating}
               size="lg"
-              className="bg-black bg-opacity-80 hover:bg-opacity-100 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 px-6 py-2 border border-white/10 backdrop-blur-sm"
+              className="!bg-black !text-white !border !border-white/10 !hover:bg-white/10 font-medium rounded-xl shadow-md transition-all duration-300 px-6 py-2 backdrop-blur-sm"
             >
               {isGenerating ? (
                 <>
@@ -105,6 +105,7 @@ function App() {
                 <>Generate Keywords</>
               )}
             </ParticleButton>
+
 
           </div>
         </div>
