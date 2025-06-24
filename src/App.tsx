@@ -96,7 +96,7 @@ function App() {
       </div>
 
       {showResults && (
-        <div className="absolute z-10 bottom-0 w-full px-4 py-6 bg-black/70 backdrop-blur-lg border-t border-white/10">
+        <div className="bg-black/30 backdrop-blur-md border border-white/10 rounded-2xl p-6">
           <div className="max-w-4xl mx-auto text-white">
             <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-yellow-400" />
