@@ -1,23 +1,16 @@
-'use client';
+'use client'
 
-import React, { useState, useEffect } from 'react';
-import { Film, Sparkles, Clock, Copy } from 'lucide-react';
-import { ParticleButton } from "@/components/ui/particle-button";
+import React, { useState } from 'react';
+import { Clock, Copy, Sparkles } from 'lucide-react';
 import { ChromeGrid } from "@/components/ui/ChromeGrid";
+import { ParticleButton } from "@/components/ui/particle-button";
 
 function App() {
   const [script, setScript] = useState('');
   const [results, setResults] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
-  const [showResults, setShowResults] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [platformSelections, setPlatformSelections] = useState<string[]>([]);
-  const [overlayFrequency, setOverlayFrequency] = useState<'low' | 'medium' | 'high'>('medium');
-  const [pointer, setPointer] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
-
-  useEffect(() => {
-    setTimeout(() => setIsLoaded(true), 100);
-  }, []);
+  const [showResults, setShowResults] = useState(false);
 
   const handleGenerate = async () => {
     if (!script.trim()) {
@@ -33,202 +26,138 @@ function App() {
       const response = await fetch("https://script2stock-backend.onrender.com/generate-keywords", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ script, overlayFrequency }),
+        body: JSON.stringify({ script }),
       });
 
       const data = await response.json();
-
       if (!response.ok) throw new Error(data.error || "Something went wrong.");
 
       setResults(data.keywords);
       setPlatformSelections(Array(data.keywords.split('\n').length).fill('storyblocks'));
       setShowResults(true);
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error generating keywords:", error);
-      alert("Error generating keywords. Please try again.");
+      alert("❌ Something went wrong.");
     } finally {
       setIsGenerating(false);
     }
   };
 
-  // Handle mouse move to update pointer for 3D interaction
-  const handleMouseMove = (event: React.MouseEvent) => {
-    const { clientX, clientY, currentTarget } = event;
-    const rect = currentTarget.getBoundingClientRect();
-    // Normalize pointer coordinates to [-1, 1]
-    const x = ((clientX - rect.left) / rect.width) * 2 - 1;
-    const y = -(((clientY - rect.top) / rect.height) * 2 - 1);
-    setPointer({ x, y });
-  };
-
   return (
-    <div 
-      className="min-h-screen relative overflow-hidden"
-      onMouseMove={handleMouseMove}
-    >
-      {/* 🔮 3D Chrome Grid Background */}
+    <div className="min-h-screen w-screen relative overflow-hidden">
+      {/* 🔮 ChromeGrid Background */}
       <div className="absolute inset-0 z-0">
-        <ChromeGrid pointer={pointer} />
+        <ChromeGrid />
       </div>
 
-      {/* Optional overlay tint */}
-      <div className="absolute inset-0 bg-black/40 z-0 pointer-events-none" />
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/50 z-0" />
 
-      {/* Glowing lights */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-20 left-10 w-2 h-2 bg-blue-400/30 rounded-full animate-pulse" />
-        <div className="absolute top-40 right-20 w-3 h-3 bg-purple-400/20 rounded-full animate-bounce" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-32 left-1/4 w-1 h-1 bg-pink-400/40 rounded-full animate-ping" style={{ animationDelay: '2s' }} />
-        <div className="absolute top-1/3 right-1/3 w-2 h-2 bg-cyan-400/25 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }} />
-      </div>
+      {/* 🌟 Centered UI */}
+      <div className="absolute z-10 left-1/2 -translate-x-1/2 top-24 md:top-32 pointer-events-none flex flex-col justify-center items-center px-4 w-full">
+        <h1 className="text-5xl md:text-7xl font-light mb-4 tracking-widest text-white whitespace-nowrap">
+          Script2Stock
+        </h1>
+        <p className="text-sm md:text-base text-white/70 font-mono tracking-wide mb-6">
+          Turn video scripts into stock keywords
+        </p>
 
-      {/* 🌟 Main Content */}
-      <div className="relative z-10 min-h-screen flex items-center justify-center p-4">
-        <div className={`w-full max-w-4xl transition-all duration-1000 ease-out ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-3xl shadow-2xl p-8 md:p-12 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-3xl" />
-
-            {/* Header */}
-            <div className="relative z-10 text-center mb-8">
-              <div className="flex items-center justify-center gap-3 mb-6">
-                <div className="p-3 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-2xl backdrop-blur-sm border border-white/20">
-                  <Film className="w-8 h-8 text-white" />
-                </div>
-                <div className="p-3 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-2xl backdrop-blur-sm border border-white/20">
-                  <Sparkles className="w-8 h-8 text-white" />
-                </div>
-              </div>
-              <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
-                <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Script2Stock</span>
-              </h1>
-              <h2 className="text-xl md:text-2xl text-white/90 mb-4 font-medium">Turn Video Scripts into Stock Footage Keywords</h2>
-              <p className="text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">Paste your video script below. Our AI will generate timestamped keywords to match stock assets faster.</p>
+        {/* Input & Button */}
+        <div className="pointer-events-auto w-full max-w-xl space-y-4 mb-10">
+          <div className="relative">
+            <textarea
+              value={script}
+              onChange={(e) => setScript(e.target.value)}
+              placeholder="Paste your video script here..."
+              className="w-full h-48 p-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white placeholder-white/50 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400/50 transition-all duration-300"
+            />
+            <div className="absolute top-4 right-4">
+              <Clock className="w-5 h-5 text-white/40" />
             </div>
+          </div>
 
-            {/* Input Box */}
-            <div className="relative z-10 space-y-6">
-              <div className="relative">
-                <textarea
-                  value={script}
-                  onChange={(e) => setScript(e.target.value)}
-                  placeholder="Paste your video script here..."
-                  className="w-full h-64 p-6 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl text-white placeholder-white/50 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-transparent transition-all duration-300"
-                  style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
-                />
-                <div className="absolute top-4 right-4">
-                  <Clock className="w-5 h-5 text-white/40" />
-                </div>
+          <ParticleButton
+            onClick={handleGenerate}
+            disabled={isGenerating}
+            className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-xl py-3 transition-all duration-300 hover:scale-105"
+          >
+            {isGenerating ? (
+              <div className="flex justify-center items-center gap-2">
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Generating...
               </div>
+            ) : (
+              <>🎬 Generate Keywords</>
+            )}
+          </ParticleButton>
+        </div>
+      </div>
 
-              {/* Frequency Selector */}
-              <div className="flex items-center gap-4 text-white font-medium">
-                <label htmlFor="overlay-frequency" className="whitespace-nowrap">Overlay Frequency:</label>
-                <select
-                  id="overlay-frequency"
-                  value={overlayFrequency}
-                  onChange={(e) => setOverlayFrequency(e.target.value as 'low' | 'medium' | 'high')}
-                  className="bg-white/10 border border-white/30 rounded-md px-3 py-2 backdrop-blur-sm text-white"
-                >
-                  <option value="low">Low</option>
-                  <option value="medium">Medium</option>
-                  <option value="high">High</option>
-                </select>
-              </div>
+      {/* 🧠 Results Section */}
+      {showResults && (
+        <div className="absolute z-10 w-full bottom-10 left-1/2 -translate-x-1/2 px-4 max-w-5xl">
+          <div className="bg-black/60 backdrop-blur-md border border-white/20 rounded-2xl p-6">
+            <h3 className="text-lg md:text-xl font-semibold text-white mb-4 flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-yellow-400" />
+              Generated Keywords
+            </h3>
+            <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
+              {results.split('\n').map((line, idx) => {
+                const keywordsOnly = line.split(']').slice(1).join(']').trim();
+                const encodedSearch = encodeURIComponent(keywordsOnly);
+                const selectedPlatform = platformSelections[idx] || 'storyblocks';
 
-              {/* 🎬 Generate Button */}
-              <div className="flex justify-center">
-                <ParticleButton
-                  onClick={handleGenerate}
-                  disabled={isGenerating}
-                  variant="default"
-                  size="lg"
-                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-2xl shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                >
-                  {isGenerating ? (
-                    <>
-                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
-                      Generating...
-                    </>
-                  ) : (
-                    <>🎬 Generate Keywords</>
-                  )}
-                </ParticleButton>
-              </div>
+                const platformUrls: Record<string, string> = {
+                  storyblocks: `https://www.storyblocks.com/all-video/search/${encodedSearch}?search-origin=search_bar`,
+                  pexels: `https://www.pexels.com/search/videos/${encodedSearch}/`,
+                  pixabay: `https://pixabay.com/videos/search/${encodedSearch}/`,
+                };
 
-              {/* Results */}
-              {showResults && (
-                <div className="relative z-10 mt-8 transition-all duration-500 ease-out opacity-100 translate-y-0">
-                  <div className="bg-black border border-white/10 rounded-2xl p-6">
-                    <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-                      <Sparkles className="w-5 h-5 text-yellow-400" />
-                      Generated Keywords
-                    </h3>
-                    <div className="space-y-2">
-                      {results.split('\n').map((line, idx) => {
-                        const keywordsOnly = line.split(']').slice(1).join(']').trim();
-                        const encodedSearch = encodeURIComponent(keywordsOnly);
-                        const selectedPlatform = platformSelections[idx] || 'storyblocks';
+                const handlePlatformChange = (newPlatform: string) => {
+                  const updatedSelections = [...platformSelections];
+                  updatedSelections[idx] = newPlatform;
+                  setPlatformSelections(updatedSelections);
+                };
 
-                        const platformUrls: Record<string, string> = {
-                          storyblocks: `https://www.storyblocks.com/all-video/search/${encodedSearch}?search-origin=search_bar`,
-                          pexels: `https://www.pexels.com/search/videos/${encodedSearch}/`,
-                          pixabay: `https://pixabay.com/videos/search/${encodedSearch}/`,
-                        };
-
-                        const handlePlatformChange = (newPlatform: string) => {
-                          const updatedSelections = [...platformSelections];
-                          updatedSelections[idx] = newPlatform;
-                          setPlatformSelections(updatedSelections);
-                        };
-
-                        return (
-                          <div key={idx} className="flex flex-col md:flex-row md:justify-between md:items-center bg-white/10 px-4 py-3 rounded-xl border border-white/10 gap-2 animate-fade-slide-up" style={{ animationDelay: `${idx * 100}ms` }}>
-                            <div className="flex-1 text-purple-300 font-mono text-sm break-words min-w-0">{line}</div>
-                            <div className="flex flex-wrap gap-2 items-center justify-end min-w-[200px]">
-                              <button
-                                onClick={() => navigator.clipboard.writeText(keywordsOnly)}
-                                className="p-2 rounded-md border border-blue-300/20 transition-all text-white bg-blue-500/20 hover:bg-blue-500/40 hover:scale-110 active:scale-95 shadow-sm hover:shadow-blue-500/30"
-                                title="Copy"
-                              >
-                                <Copy className="w-4 h-4" />
-                              </button>
-                              <select
-                                className="text-black text-xs bg-blue/10 border border-white/20 rounded-md px-2 py-1 backdrop-blur-sm"
-                                value={selectedPlatform}
-                                onChange={(e) => handlePlatformChange(e.target.value)}
-                              >
-                                <option value="storyblocks">🎞️ Storyblocks</option>
-                                <option value="pexels">📽️ Pexels</option>
-                                <option value="pixabay">🎬 Pixabay</option>
-                              </select>
-                              <a href={platformUrls[selectedPlatform]} target="_blank" rel="noopener noreferrer" className="text-white text-xs bg-pink-500/20 hover:bg-yellow-500/40 px-3 py-1 rounded-md border border-yellow-300/20 transition-all">🔍 Search</a>
-                            </div>
-                          </div>
-                        );
-                      })}
+                return (
+                  <div
+                    key={idx}
+                    className="flex flex-col md:flex-row md:justify-between md:items-center bg-white/10 px-4 py-3 rounded-xl border border-white/10 gap-2"
+                  >
+                    <div className="flex-1 text-purple-300 font-mono text-sm break-words min-w-0">{line}</div>
+                    <div className="flex flex-wrap gap-2 items-center justify-end min-w-[200px]">
+                      <button
+                        onClick={() => navigator.clipboard.writeText(keywordsOnly)}
+                        className="p-2 rounded-md border border-blue-300/20 text-white bg-blue-500/20 hover:bg-blue-500/40 hover:scale-110 transition-all"
+                        title="Copy"
+                      >
+                        <Copy className="w-4 h-4" />
+                      </button>
+                      <select
+                        className="text-black text-xs bg-blue/10 border border-white/20 rounded-md px-2 py-1 backdrop-blur-sm"
+                        value={selectedPlatform}
+                        onChange={(e) => handlePlatformChange(e.target.value)}
+                      >
+                        <option value="storyblocks">🎞️ Storyblocks</option>
+                        <option value="pexels">📽️ Pexels</option>
+                        <option value="pixabay">🎬 Pixabay</option>
+                      </select>
+                      <a
+                        href={platformUrls[selectedPlatform]}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-white text-xs bg-pink-500/20 hover:bg-yellow-500/40 px-3 py-1 rounded-md border border-yellow-300/20 transition-all"
+                      >
+                        🔍 Search
+                      </a>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
-
-            {/* Feature Cards */}
-            <div className="relative z-10 mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[
-                { icon: <Clock className="w-6 h-6 text-blue-300" />, title: "Timestamped", desc: "Keywords matched to specific moments in your script" },
-                { icon: <Sparkles className="w-6 h-6 text-purple-300" />, title: "AI-Powered", desc: "Smart keyword generation using advanced AI" },
-                { icon: <Film className="w-6 h-6 text-pink-300" />, title: "Stock-Ready", desc: "Keywords optimized for stock footage searches" },
-              ].map(({ icon, title, desc }, i) => (
-                <div key={i} className="text-center p-4">
-                  <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mx-auto mb-3">{icon}</div>
-                  <h4 className="text-white font-semibold mb-2">{title}</h4>
-                  <p className="text-white/60 text-sm">{desc}</p>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
