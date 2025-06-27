@@ -14,13 +14,6 @@ function App() {
   const [platformSelections, setPlatformSelections] = useState<string[]>([]);
   const [overlayFrequency, setOverlayFrequency] = useState<'low' | 'medium' | 'high'>('medium');
 
-  const updatePointerFromEvent = (clientX: number, clientY: number) => {
-    setPointer({
-      x: (clientX / window.innerWidth) * 2 - 1,
-      y: -(clientY / window.innerHeight) * 2 + 1
-    });
-  };
-
   const handleGenerate = async () => {
     if (!script.trim()) {
       alert("Please paste a script first.");
@@ -52,7 +45,14 @@ function App() {
     }
   };
 
-  const handleBack = () => {
+  const updatePointerFromEvent = (clientX: number, clientY: number) => {
+    setPointer({
+      x: (clientX / window.innerWidth) * 2 - 1,
+      y: -(clientY / window.innerHeight) * 2 + 1
+    });
+  };
+
+  const resetView = () => {
     setShowResults(false);
     setResults('');
     setScript('');
@@ -80,41 +80,35 @@ function App() {
         <ChromeGrid pointer={pointer} />
       </div>
 
-      {/* Title */}
-      <div
-        className={`absolute z-20 w-full left-1/2 -translate-x-1/2 ${
-          showResults ? 'top-6' : 'top-1/2 -translate-y-1/2'
-        } flex justify-center`}
-      >
-        <h1 className="text-4xl md:text-6xl font-light tracking-widest text-white text-center pointer-events-none">
-          Script2Stock
-        </h1>
-      </div>
-
-      {/* Input & Controls */}
       {!showResults && (
-        <div className="absolute z-10 top-[60%] left-1/2 -translate-x-1/2 flex flex-col items-center w-full max-w-2xl px-4">
-          <p className="text-sm md:text-base text-white/70 font-mono tracking-wide mb-4 text-center">
-            Turn video scripts into stock footage keywords
+        <div className="absolute z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl px-4 flex flex-col items-center gap-4 text-center">
+          <h1 className="text-4xl md:text-6xl font-light tracking-widest text-white">Script2Stock</h1>
+          <p className="text-sm md:text-base text-white/70 font-mono tracking-wide">
+            Turn Video Scripts into Stock Footage Keywords
           </p>
           <textarea
             value={script}
             onChange={(e) => setScript(e.target.value)}
             placeholder="Paste your video script here..."
-            className="w-full h-40 p-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white placeholder-white/50 resize-none focus:outline-none focus:ring-2 focus:ring-white/40 mb-4"
+            className="w-full h-40 p-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white placeholder-white/50 resize-none focus:outline-none focus:ring-2 focus:ring-white/40"
           />
 
           {/* Overlay Frequency Selector */}
-          <div className="w-full flex justify-center mb-4">
-            <select
-              className="bg-black/30 border border-white/20 text-white text-sm px-3 py-1 rounded-md backdrop-blur-md"
-              value={overlayFrequency}
-              onChange={(e) => setOverlayFrequency(e.target.value as 'low' | 'medium' | 'high')}
-            >
-              <option value="low">Overlay: Low</option>
-              <option value="medium">Overlay: Medium</option>
-              <option value="high">Overlay: High</option>
-            </select>
+          <div className="flex items-center justify-center gap-2 mt-1">
+            <label className="text-white/60 text-sm font-mono">Overlay Frequency:</label>
+            {['low', 'medium', 'high'].map((level) => (
+              <button
+                key={level}
+                className={`px-3 py-1 rounded-md border text-sm font-mono transition-all duration-200 ${
+                  overlayFrequency === level
+                    ? 'bg-white/20 text-white border-white'
+                    : 'bg-transparent text-white/60 border-white/20 hover:bg-white/10'
+                }`}
+                onClick={() => setOverlayFrequency(level as 'low' | 'medium' | 'high')}
+              >
+                {level}
+              </button>
+            ))}
           </div>
 
           {/* Generate Button */}
@@ -138,21 +132,24 @@ function App() {
 
       {/* Results */}
       {showResults && (
-        <div className="absolute z-10 w-full top-[20%] px-4 flex justify-center">
-          <div className="bg-black/30 backdrop-blur-md border border-white/10 rounded-2xl p-6 max-w-4xl w-full text-white space-y-4">
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg md:text-xl font-semibold flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-yellow-300" />
-                Generated Keywords
-              </h3>
-              <button
-                onClick={handleBack}
-                className="flex items-center gap-1 text-sm text-white bg-white/10 hover:bg-white/20 border border-white/10 px-3 py-1 rounded-md transition-all"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Back
-              </button>
-            </div>
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-4">
+          <div className="flex flex-col items-center mb-6">
+            <h1 className="text-4xl md:text-5xl font-light tracking-widest text-white mb-2">
+              Script2Stock
+            </h1>
+            <button
+              onClick={resetView}
+              className="text-white/80 hover:text-white text-sm flex items-center gap-1 mb-4 px-3 py-1 border border-white/20 rounded-md backdrop-blur-sm"
+            >
+              <ArrowLeft className="w-4 h-4" /> Back
+            </button>
+          </div>
+
+          <div className="bg-black/30 backdrop-blur-md border border-white/10 rounded-2xl p-6 max-w-4xl w-full text-white">
+            <h3 className="text-lg md:text-xl font-semibold mb-4 flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-yellow-400" />
+              Generated Keywords
+            </h3>
             <div className="space-y-2 max-h-[40vh] overflow-y-auto pr-1">
               {results.split('\n').map((line, idx) => {
                 const keywordsOnly = line.split(']').slice(1).join(']').trim();
@@ -176,7 +173,7 @@ function App() {
                     key={idx}
                     className="flex flex-col md:flex-row md:justify-between md:items-center bg-white/5 px-4 py-3 rounded-xl border border-white/10 gap-2"
                   >
-                    <div className="flex-1 text-white font-mono text-sm break-words min-w-0">
+                    <div className="flex-1 text-white font-mono text-sm break-words min-w-0 drop-shadow-[0_0_2px_white]">
                       {line}
                     </div>
                     <div className="flex flex-wrap gap-2 items-center justify-end min-w-[200px]">
@@ -188,13 +185,13 @@ function App() {
                         <Copy className="w-4 h-4" />
                       </button>
                       <select
-                        className="text-white text-xs bg-black/20 border border-white/20 rounded-md px-2 py-1 backdrop-blur-sm"
+                        className="text-white text-xs bg-transparent border border-white/20 rounded-md px-2 py-1 backdrop-blur-sm"
                         value={selectedPlatform}
                         onChange={(e) => handlePlatformChange(e.target.value)}
                       >
-                        <option value="storyblocks">🎞️ Storyblocks</option>
-                        <option value="pexels">📽️ Pexels</option>
-                        <option value="pixabay">🎬 Pixabay</option>
+                        <option value="storyblocks">Storyblocks</option>
+                        <option value="pexels">Pexels</option>
+                        <option value="pixabay">Pixabay</option>
                       </select>
                       <a
                         href={platformUrls[selectedPlatform]}
@@ -202,7 +199,7 @@ function App() {
                         rel="noopener noreferrer"
                         className="text-white text-xs bg-white/10 hover:bg-white/20 px-3 py-1 rounded-md border border-white/20 transition-all"
                       >
-                        🔍 Search
+                        Search
                       </a>
                     </div>
                   </div>
