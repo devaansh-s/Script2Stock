@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChromeGrid } from "@/components/ui/ChromeGrid";
-import { Sparkles, Copy } from 'lucide-react';
+import { Sparkles, Copy, RefreshCcw } from 'lucide-react';
 import { ParticleButton } from "@/components/ui/particle-button";
 
 function App() {
@@ -52,6 +52,13 @@ function App() {
     });
   };
 
+  const handleReset = () => {
+    setScript('');
+    setResults('');
+    setShowResults(false);
+    setOverlayFrequency('medium');
+  };
+
   return (
     <div
       className="relative min-h-screen w-full overflow-hidden"
@@ -69,74 +76,79 @@ function App() {
         }
       }}
     >
-      {/* ChromeGrid Background */}
-      <div className="fixed inset-0 -z-10 pointer-events-none">
+      {/* 3D ChromeGrid Background */}
+      <div className="absolute inset-0 z-0">
         <ChromeGrid pointer={pointer} />
       </div>
 
-      {/* Title, Subtitle, Input */}
-      <div className="absolute z-10 left-1/2 -translate-x-1/2 top-[40%] -translate-y-1/2 pointer-events-none flex flex-col justify-center items-center p-4 w-full">
-        <h1 className="text-4xl md:text-6xl font-light tracking-widest text-white pointer-events-none mb-4 text-center">
-          Script2Stock
-        </h1>
-        <p className="text-sm md:text-base text-white/70 font-mono tracking-wide pointer-events-none mb-6 text-center max-w-md">
-          Video Scripts to Stock Footage Keywords
-        </p>
-        <div className="w-full max-w-2xl pointer-events-auto">
-          <textarea
-            value={script}
-            onChange={(e) => setScript(e.target.value)}
-            placeholder="Paste your video script here..."
-            className="w-full h-40 p-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white placeholder-white/50 resize-none focus:outline-none focus:ring-2 focus:ring-white/40"
-          />
-        
-          {/* Overlay Frequency */}
-          <div className="mt-3 mb-4 flex items-center gap-2 text-white text-sm">
-            <label htmlFor="overlayFrequency" className="font-mono text-white/70">
-              Overlay Frequency:
-            </label>
-            <select
-              id="overlayFrequency"
-              value={overlayFrequency}
-              onChange={(e) => setOverlayFrequency(e.target.value as 'low' | 'medium' | 'high')}
-              className="bg-black/30 border border-white/20 text-white text-xs px-3 py-1 rounded-md backdrop-blur-sm focus:outline-none"
-            >
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-            </select>
-          </div>
-        
-          <div className="flex justify-center">
-            <ParticleButton
-              onClick={handleGenerate}
-              disabled={isGenerating}
-              size="lg"
-              className="!bg-black !text-white !border !border-white/10 !hover:bg-white/10 font-medium rounded-xl shadow-md transition-all duration-300 px-6 py-2 backdrop-blur-sm"
-            >
-              {isGenerating ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
-                  Generating...
-                </>
-              ) : (
-                <>Generate Keywords</>
-              )}
-            </ParticleButton>
+      {/* Landing Page */}
+      {!showResults ? (
+        <div className="absolute z-10 left-1/2 -translate-x-1/2 top-[40%] -translate-y-1/2 pointer-events-none flex flex-col justify-center items-center p-4 w-full">
+          <h1 className="text-4xl md:text-6xl font-light tracking-widest text-white pointer-events-none mb-4 text-center">
+            Script2Stock
+          </h1>
+          <p className="text-sm md:text-base text-white/70 font-mono tracking-wide pointer-events-none mb-6 text-center max-w-md">
+            Video Scripts to Stock Footage Keywords
+          </p>
+          <div className="w-full max-w-2xl pointer-events-auto">
+            <textarea
+              value={script}
+              onChange={(e) => setScript(e.target.value)}
+              placeholder="Paste your video script here..."
+              className="w-full h-40 p-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white placeholder-white/50 resize-none focus:outline-none focus:ring-2 focus:ring-white/40"
+            />
+            <div className="mt-3 mb-4 flex items-center gap-2 text-white text-sm">
+              <label htmlFor="overlayFrequency" className="font-mono text-white/70">
+                Overlay Frequency:
+              </label>
+              <select
+                id="overlayFrequency"
+                value={overlayFrequency}
+                onChange={(e) => setOverlayFrequency(e.target.value as 'low' | 'medium' | 'high')}
+                className="bg-black/30 border border-white/20 text-white text-xs px-3 py-1 rounded-md backdrop-blur-sm focus:outline-none"
+              >
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+            <div className="flex justify-center">
+              <ParticleButton
+                onClick={handleGenerate}
+                disabled={isGenerating}
+                size="lg"
+                className="!bg-black !text-white !border !border-white/10 !hover:bg-white/10 font-medium rounded-xl shadow-md transition-all duration-300 px-6 py-2 backdrop-blur-sm"
+              >
+                {isGenerating ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
+                    Generating...
+                  </>
+                ) : (
+                  <>Generate Keywords</>
+                )}
+              </ParticleButton>
+            </div>
           </div>
         </div>
-
-      </div>
-
-      {/* Results Section */}
-      {showResults && (
-        <div className="relative w-full z-10 p-4 mt-[60vh] sm:mt-[50vh]">
+      ) : (
+        // Results Page
+        <div className="relative w-full z-10 p-4 mt-12">
           <div className="bg-black/30 backdrop-blur-md border border-white/10 rounded-2xl p-6 max-w-4xl mx-auto text-white">
-            <h3 className="text-lg md:text-xl font-semibold mb-4 flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-yellow-400" />
-              Generated Keywords
-            </h3>
-            <div className="space-y-2 max-h-[40vh] overflow-y-auto pr-1">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg md:text-xl font-semibold flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-white" />
+                Generated Keywords
+              </h3>
+              <button
+                onClick={handleReset}
+                className="flex items-center gap-1 text-white text-xs border border-white/20 px-3 py-1 rounded-md hover:bg-white/10 transition-all"
+              >
+                <RefreshCcw className="w-4 h-4" />
+                Reset
+              </button>
+            </div>
+            <div className="space-y-2 max-h-[70vh] overflow-y-auto pr-1">
               {results.split('\n').map((line, idx) => {
                 const keywordsOnly = line.split(']').slice(1).join(']').trim();
                 const encodedSearch = encodeURIComponent(keywordsOnly);
@@ -159,19 +171,19 @@ function App() {
                     key={idx}
                     className="flex flex-col md:flex-row md:justify-between md:items-center bg-white/5 px-4 py-3 rounded-xl border border-white/10 gap-2"
                   >
-                    <div className="flex-1 text-white font-mono text-sm break-words min-w-0 animate-pulse drop-shadow-[0_0_2px_white]">
+                    <div className="flex-1 text-white font-mono text-sm break-words min-w-0 drop-shadow-[0_0_2px_white]">
                       {line}
                     </div>
                     <div className="flex flex-wrap gap-2 items-center justify-end min-w-[200px]">
                       <button
                         onClick={() => navigator.clipboard.writeText(keywordsOnly)}
-                        className="p-2 rounded-md border border-blue-300/20 transition-all text-white bg-blue-500/20 hover:bg-blue-500/40"
+                        className="p-2 rounded-md border border-white/20 text-white bg-white/10 hover:bg-white/20"
                         title="Copy"
                       >
                         <Copy className="w-4 h-4" />
                       </button>
                       <select
-                        className="text-black text-xs bg-blue/10 border border-white/20 rounded-md px-2 py-1 backdrop-blur-sm"
+                        className="text-white text-xs bg-black/30 border border-white/20 rounded-md px-2 py-1 backdrop-blur-sm"
                         value={selectedPlatform}
                         onChange={(e) => handlePlatformChange(e.target.value)}
                       >
@@ -183,9 +195,9 @@ function App() {
                         href={platformUrls[selectedPlatform]}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-white text-xs bg-pink-500/20 hover:bg-yellow-500/40 px-3 py-1 rounded-md border border-yellow-300/20 transition-all"
+                        className="text-white text-xs bg-white/10 hover:bg-white/20 px-3 py-1 rounded-md border border-white/10 transition-all"
                       >
-                        🔍 Search
+                        Search
                       </a>
                     </div>
                   </div>
