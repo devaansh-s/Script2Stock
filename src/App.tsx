@@ -89,7 +89,25 @@ function App() {
             placeholder="Paste your video script here..."
             className="w-full h-40 p-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white placeholder-white/50 resize-none focus:outline-none focus:ring-2 focus:ring-white/40"
           />
-          <div className="flex justify-center mt-4">
+        
+          {/* Overlay Frequency */}
+          <div className="mt-3 mb-4 flex items-center gap-2 text-white text-sm">
+            <label htmlFor="overlayFrequency" className="font-mono text-white/70">
+              Overlay Frequency:
+            </label>
+            <select
+              id="overlayFrequency"
+              value={overlayFrequency}
+              onChange={(e) => setOverlayFrequency(e.target.value as 'low' | 'medium' | 'high')}
+              className="bg-black/30 border border-white/20 text-white text-xs px-3 py-1 rounded-md backdrop-blur-sm focus:outline-none"
+            >
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+        
+          <div className="flex justify-center">
             <ParticleButton
               onClick={handleGenerate}
               disabled={isGenerating}
@@ -107,6 +125,7 @@ function App() {
             </ParticleButton>
           </div>
         </div>
+
       </div>
 
       {/* Results Section */}
