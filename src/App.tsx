@@ -112,72 +112,72 @@ function App() {
       </div>
 
       {showResults && (
-    <div className="absolute bottom-0 left-0 w-full z-10 p-4">
-      <div className="bg-black/30 backdrop-blur-md border border-white/10 rounded-2xl p-6 max-w-4xl mx-auto text-white">
-        <h3 className="text-lg md:text-xl font-semibold mb-4 flex items-center gap-2">
-          <Sparkles className="w-5 h-5 text-yellow-400" />
-          Generated Keywords
-        </h3>
-        <div className="space-y-2 max-h-[40vh] overflow-y-auto pr-1">
-          {results.split('\n').map((line, idx) => {
-            const keywordsOnly = line.split(']').slice(1).join(']').trim();
-            const encodedSearch = encodeURIComponent(keywordsOnly);
-            const selectedPlatform = platformSelections[idx] || 'storyblocks';
-  
-            const platformUrls: Record<string, string> = {
-              storyblocks: `https://www.storyblocks.com/all-video/search/${encodedSearch}?search-origin=search_bar`,
-              pexels: `https://www.pexels.com/search/videos/${encodedSearch}/`,
-              pixabay: `https://pixabay.com/videos/search/${encodedSearch}/`,
-            };
-  
-            const handlePlatformChange = (newPlatform: string) => {
-              const updatedSelections = [...platformSelections];
-              updatedSelections[idx] = newPlatform;
-              setPlatformSelections(updatedSelections);
-            };
-  
-            return (
-              <div
-                key={idx}
-                className="flex flex-col md:flex-row md:justify-between md:items-center bg-white/5 px-4 py-3 rounded-xl border border-white/10 gap-2"
-              >
-                <div className="flex-1 text-white font-mono text-sm break-words min-w-0 animate-pulse drop-shadow-[0_0_2px_white]">
-                  {line}
+      <div className="absolute bottom-0 left-0 w-full z-10 p-4">
+        <div className="bg-black/30 backdrop-blur-md border border-white/10 rounded-2xl p-6 max-w-4xl mx-auto text-white">
+          <h3 className="text-lg md:text-xl font-semibold mb-4 flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-yellow-400" />
+            Generated Keywords
+          </h3>
+          <div className="space-y-2 max-h-[40vh] overflow-y-auto pr-1">
+            {results.split('\n').map((line, idx) => {
+              const keywordsOnly = line.split(']').slice(1).join(']').trim();
+              const encodedSearch = encodeURIComponent(keywordsOnly);
+              const selectedPlatform = platformSelections[idx] || 'storyblocks';
+    
+              const platformUrls: Record<string, string> = {
+                storyblocks: `https://www.storyblocks.com/all-video/search/${encodedSearch}?search-origin=search_bar`,
+                pexels: `https://www.pexels.com/search/videos/${encodedSearch}/`,
+                pixabay: `https://pixabay.com/videos/search/${encodedSearch}/`,
+              };
+    
+              const handlePlatformChange = (newPlatform: string) => {
+                const updatedSelections = [...platformSelections];
+                updatedSelections[idx] = newPlatform;
+                setPlatformSelections(updatedSelections);
+              };
+    
+              return (
+                <div
+                  key={idx}
+                  className="flex flex-col md:flex-row md:justify-between md:items-center bg-white/5 px-4 py-3 rounded-xl border border-white/10 gap-2"
+                >
+                  <div className="flex-1 text-white font-mono text-sm break-words min-w-0 animate-pulse drop-shadow-[0_0_2px_white]">
+                    {line}
+                  </div>
+                  <div className="flex flex-wrap gap-2 items-center justify-end min-w-[200px]">
+                    <button
+                      onClick={() => navigator.clipboard.writeText(keywordsOnly)}
+                      className="p-2 rounded-md border border-blue-300/20 transition-all text-white bg-blue-500/20 hover:bg-blue-500/40"
+                      title="Copy"
+                    >
+                      <Copy className="w-4 h-4" />
+                    </button>
+                    <select
+                      className="text-black text-xs bg-blue/10 border border-white/20 rounded-md px-2 py-1 backdrop-blur-sm"
+                      value={selectedPlatform}
+                      onChange={(e) => handlePlatformChange(e.target.value)}
+                    >
+                      <option value="storyblocks">🎞️ Storyblocks</option>
+                      <option value="pexels">📽️ Pexels</option>
+                      <option value="pixabay">🎬 Pixabay</option>
+                    </select>
+                    <a
+                      href={platformUrls[selectedPlatform]}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white text-xs bg-pink-500/20 hover:bg-yellow-500/40 px-3 py-1 rounded-md border border-yellow-300/20 transition-all"
+                    >
+                      🔍 Search
+                    </a>
+                  </div>
                 </div>
-                <div className="flex flex-wrap gap-2 items-center justify-end min-w-[200px]">
-                  <button
-                    onClick={() => navigator.clipboard.writeText(keywordsOnly)}
-                    className="p-2 rounded-md border border-blue-300/20 transition-all text-white bg-blue-500/20 hover:bg-blue-500/40"
-                    title="Copy"
-                  >
-                    <Copy className="w-4 h-4" />
-                  </button>
-                  <select
-                    className="text-black text-xs bg-blue/10 border border-white/20 rounded-md px-2 py-1 backdrop-blur-sm"
-                    value={selectedPlatform}
-                    onChange={(e) => handlePlatformChange(e.target.value)}
-                  >
-                    <option value="storyblocks">🎞️ Storyblocks</option>
-                    <option value="pexels">📽️ Pexels</option>
-                    <option value="pixabay">🎬 Pixabay</option>
-                  </select>
-                  <a
-                    href={platformUrls[selectedPlatform]}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-white text-xs bg-pink-500/20 hover:bg-yellow-500/40 px-3 py-1 rounded-md border border-yellow-300/20 transition-all"
-                  >
-                    🔍 Search
-                  </a>
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </div>
-    </div>
-  )}
-  
-  }
+    )}
+    
+    }
 
 export default App;
