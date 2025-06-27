@@ -75,37 +75,26 @@ function App() {
         }
       }}
     >
-      {/* Background */}
+      {/* 3D Background */}
       <div className="absolute inset-0 z-0">
         <ChromeGrid pointer={pointer} />
       </div>
 
-      {/* Script2Stock Title - Landing and Result */}
-      <div className={`absolute z-10 w-full left-1/2 -translate-x-1/2 ${showResults ? 'top-8' : 'top-1/2 -translate-y-1/2'} pointer-events-none flex justify-center`}>
-        <h1 className="text-4xl md:text-6xl font-light tracking-widest text-white pointer-events-none text-center">
+      {/* Title */}
+      <div
+        className={`absolute z-20 w-full left-1/2 -translate-x-1/2 ${
+          showResults ? 'top-6' : 'top-1/2 -translate-y-1/2'
+        } flex justify-center`}
+      >
+        <h1 className="text-4xl md:text-6xl font-light tracking-widest text-white text-center pointer-events-none">
           Script2Stock
         </h1>
       </div>
 
-      {/* Overlay Frequency Selector */}
+      {/* Input & Controls */}
       {!showResults && (
-        <div className="absolute z-10 top-6 right-6 pointer-events-auto">
-          <select
-            className="bg-black/30 border border-white/20 text-white text-sm px-3 py-1 rounded-md backdrop-blur-md"
-            value={overlayFrequency}
-            onChange={(e) => setOverlayFrequency(e.target.value as 'low' | 'medium' | 'high')}
-          >
-            <option value="low">Overlay: Low</option>
-            <option value="medium">Overlay: Medium</option>
-            <option value="high">Overlay: High</option>
-          </select>
-        </div>
-      )}
-
-      {/* Input Section */}
-      {!showResults && (
-        <div className="absolute z-10 w-full left-1/2 -translate-x-1/2 top-[55%] -translate-y-1/2 flex flex-col items-center p-4 max-w-2xl pointer-events-auto">
-          <p className="text-sm md:text-base text-white/70 font-mono tracking-wide mb-6 text-center max-w-md">
+        <div className="absolute z-10 top-[60%] left-1/2 -translate-x-1/2 flex flex-col items-center w-full max-w-2xl px-4">
+          <p className="text-sm md:text-base text-white/70 font-mono tracking-wide mb-4 text-center">
             Turn video scripts into stock footage keywords
           </p>
           <textarea
@@ -114,6 +103,21 @@ function App() {
             placeholder="Paste your video script here..."
             className="w-full h-40 p-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white placeholder-white/50 resize-none focus:outline-none focus:ring-2 focus:ring-white/40 mb-4"
           />
+
+          {/* Overlay Frequency Selector */}
+          <div className="w-full flex justify-center mb-4">
+            <select
+              className="bg-black/30 border border-white/20 text-white text-sm px-3 py-1 rounded-md backdrop-blur-md"
+              value={overlayFrequency}
+              onChange={(e) => setOverlayFrequency(e.target.value as 'low' | 'medium' | 'high')}
+            >
+              <option value="low">Overlay: Low</option>
+              <option value="medium">Overlay: Medium</option>
+              <option value="high">Overlay: High</option>
+            </select>
+          </div>
+
+          {/* Generate Button */}
           <ParticleButton
             onClick={handleGenerate}
             disabled={isGenerating}
@@ -132,9 +136,9 @@ function App() {
         </div>
       )}
 
-      {/* Results Section */}
+      {/* Results */}
       {showResults && (
-        <div className="absolute top-[25%] w-full z-10 px-4 flex justify-center">
+        <div className="absolute z-10 w-full top-[20%] px-4 flex justify-center">
           <div className="bg-black/30 backdrop-blur-md border border-white/10 rounded-2xl p-6 max-w-4xl w-full text-white space-y-4">
             <div className="flex justify-between items-center">
               <h3 className="text-lg md:text-xl font-semibold flex items-center gap-2">
