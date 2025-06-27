@@ -69,10 +69,10 @@ function App() {
         }
       }}
     >
-      {/* Background Grid */}
-      <div className="absolute inset-0 -z-10">
+      <div className="fixed inset-0 -z-10 pointer-events-none">
         <ChromeGrid pointer={pointer} />
       </div>
+
 
       {/* Main Content */}
       <div className="flex flex-col justify-center items-center px-4 pt-28 md:pt-36 pb-12 w-full">
