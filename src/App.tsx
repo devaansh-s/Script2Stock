@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { ChromeGrid } from "@/components/ui/ChromeGrid";
-import { Sparkles, Copy, SlidersHorizontal } from 'lucide-react';
+import { Sparkles, Copy, ArrowLeft } from 'lucide-react';
 import { ParticleButton } from "@/components/ui/particle-button";
 
 function App() {
@@ -13,6 +13,13 @@ function App() {
   const [pointer, setPointer] = useState({ x: 0, y: 0 });
   const [platformSelections, setPlatformSelections] = useState<string[]>([]);
   const [overlayFrequency, setOverlayFrequency] = useState<'low' | 'medium' | 'high'>('medium');
+
+  const updatePointerFromEvent = (clientX: number, clientY: number) => {
+    setPointer({
+      x: (clientX / window.innerWidth) * 2 - 1,
+      y: -(clientY / window.innerHeight) * 2 + 1
+    });
+  };
 
   const handleGenerate = async () => {
     if (!script.trim()) {
@@ -45,90 +52,104 @@ function App() {
     }
   };
 
-  const updatePointerFromEvent = (clientX: number, clientY: number) => {
-    setPointer({
-      x: (clientX / window.innerWidth) * 2 - 1,
-      y: -(clientY / window.innerHeight) * 2 + 1
-    });
+  const handleBack = () => {
+    setShowResults(false);
+    setResults('');
+    setScript('');
   };
 
   return (
     <div
       className="relative min-h-screen w-full overflow-hidden"
       onMouseMove={(e) => updatePointerFromEvent(e.clientX, e.clientY)}
-      onTouchStart={(e) => e.touches[0] && updatePointerFromEvent(e.touches[0].clientX, e.touches[0].clientY)}
-      onTouchMove={(e) => e.touches[0] && updatePointerFromEvent(e.touches[0].clientX, e.touches[0].clientY)}
+      onTouchStart={(e) => {
+        if (e.touches.length > 0) {
+          const touch = e.touches[0];
+          updatePointerFromEvent(touch.clientX, touch.clientY);
+        }
+      }}
+      onTouchMove={(e) => {
+        if (e.touches.length > 0) {
+          const touch = e.touches[0];
+          updatePointerFromEvent(touch.clientX, touch.clientY);
+        }
+      }}
     >
-      {/* 3D Background */}
+      {/* Background */}
       <div className="absolute inset-0 z-0">
         <ChromeGrid pointer={pointer} />
       </div>
 
-      {/* Title */}
-      <div className="absolute z-10 left-1/2 top-12 -translate-x-1/2 pointer-events-none">
-        <h1 className="text-4xl md:text-6xl font-light tracking-widest text-white text-center">Script2Stock</h1>
+      {/* Script2Stock Title - Landing and Result */}
+      <div className={`absolute z-10 w-full left-1/2 -translate-x-1/2 ${showResults ? 'top-8' : 'top-1/2 -translate-y-1/2'} pointer-events-none flex justify-center`}>
+        <h1 className="text-4xl md:text-6xl font-light tracking-widest text-white pointer-events-none text-center">
+          Script2Stock
+        </h1>
       </div>
 
       {/* Overlay Frequency Selector */}
       {!showResults && (
-        <div className="absolute top-24 md:top-28 right-6 z-20 flex items-center gap-2 text-white text-xs font-mono backdrop-blur-md px-3 py-2 border border-white/10 rounded-md bg-black/40">
-          <SlidersHorizontal className="w-4 h-4" />
-          <span>Overlay Intensity:</span>
+        <div className="absolute z-10 top-6 right-6 pointer-events-auto">
           <select
+            className="bg-black/30 border border-white/20 text-white text-sm px-3 py-1 rounded-md backdrop-blur-md"
             value={overlayFrequency}
-            onChange={(e) => setOverlayFrequency(e.target.value as any)}
-            className="bg-transparent border border-white/20 rounded px-2 py-1 text-white/80 outline-none focus:ring-1 focus:ring-white/30"
+            onChange={(e) => setOverlayFrequency(e.target.value as 'low' | 'medium' | 'high')}
           >
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
+            <option value="low">Overlay: Low</option>
+            <option value="medium">Overlay: Medium</option>
+            <option value="high">Overlay: High</option>
           </select>
         </div>
       )}
 
-      {/* Landing Page: Text Area & Generate Button */}
+      {/* Input Section */}
       {!showResults && (
-        <div className="absolute z-10 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 pointer-events-auto flex flex-col items-center w-full px-4">
-          <p className="text-sm md:text-base text-white/70 font-mono tracking-wide text-center mb-6 max-w-md">
-            Video Scripts to Stock Footage Keywords
+        <div className="absolute z-10 w-full left-1/2 -translate-x-1/2 top-[55%] -translate-y-1/2 flex flex-col items-center p-4 max-w-2xl pointer-events-auto">
+          <p className="text-sm md:text-base text-white/70 font-mono tracking-wide mb-6 text-center max-w-md">
+            Turn video scripts into stock footage keywords
           </p>
-          <div className="w-full max-w-2xl">
-            <textarea
-              value={script}
-              onChange={(e) => setScript(e.target.value)}
-              placeholder="Paste your video script here..."
-              className="w-full h-40 p-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white placeholder-white/50 resize-none focus:outline-none focus:ring-2 focus:ring-white/30"
-            />
-            <div className="flex justify-center mt-4">
-              <ParticleButton
-                onClick={handleGenerate}
-                disabled={isGenerating}
-                size="lg"
-                className="!bg-black !text-white !border !border-white/10 !hover:bg-white/10 font-medium rounded-xl shadow-md transition-all duration-300 px-6 py-2 backdrop-blur-sm"
-              >
-                {isGenerating ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
-                    Generating...
-                  </>
-                ) : (
-                  <>Generate Keywords</>
-                )}
-              </ParticleButton>
-            </div>
-          </div>
+          <textarea
+            value={script}
+            onChange={(e) => setScript(e.target.value)}
+            placeholder="Paste your video script here..."
+            className="w-full h-40 p-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white placeholder-white/50 resize-none focus:outline-none focus:ring-2 focus:ring-white/40 mb-4"
+          />
+          <ParticleButton
+            onClick={handleGenerate}
+            disabled={isGenerating}
+            size="lg"
+            className="!bg-black !text-white !border !border-white/10 !hover:bg-white/10 font-medium rounded-xl shadow-md transition-all duration-300 px-6 py-2 backdrop-blur-sm"
+          >
+            {isGenerating ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
+                Generating...
+              </>
+            ) : (
+              <>Generate Keywords</>
+            )}
+          </ParticleButton>
         </div>
       )}
 
       {/* Results Section */}
       {showResults && (
-        <div className="absolute z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full px-4">
-          <div className="bg-black/30 backdrop-blur-md border border-white/10 rounded-2xl p-6 max-w-4xl mx-auto text-white">
-            <h3 className="text-lg md:text-xl font-semibold mb-4 flex items-center gap-2 justify-center">
-              <Sparkles className="w-5 h-5 text-yellow-400" />
-              Generated Keywords
-            </h3>
-            <div className="space-y-2 max-h-[45vh] overflow-y-auto pr-1">
+        <div className="absolute top-[25%] w-full z-10 px-4 flex justify-center">
+          <div className="bg-black/30 backdrop-blur-md border border-white/10 rounded-2xl p-6 max-w-4xl w-full text-white space-y-4">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg md:text-xl font-semibold flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-yellow-300" />
+                Generated Keywords
+              </h3>
+              <button
+                onClick={handleBack}
+                className="flex items-center gap-1 text-sm text-white bg-white/10 hover:bg-white/20 border border-white/10 px-3 py-1 rounded-md transition-all"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back
+              </button>
+            </div>
+            <div className="space-y-2 max-h-[40vh] overflow-y-auto pr-1">
               {results.split('\n').map((line, idx) => {
                 const keywordsOnly = line.split(']').slice(1).join(']').trim();
                 const encodedSearch = encodeURIComponent(keywordsOnly);
@@ -151,19 +172,19 @@ function App() {
                     key={idx}
                     className="flex flex-col md:flex-row md:justify-between md:items-center bg-white/5 px-4 py-3 rounded-xl border border-white/10 gap-2"
                   >
-                    <div className="flex-1 text-white font-mono text-sm break-words min-w-0 drop-shadow-[0_0_2px_white]">
+                    <div className="flex-1 text-white font-mono text-sm break-words min-w-0">
                       {line}
                     </div>
                     <div className="flex flex-wrap gap-2 items-center justify-end min-w-[200px]">
                       <button
                         onClick={() => navigator.clipboard.writeText(keywordsOnly)}
-                        className="p-2 rounded-md border border-white/20 bg-white/10 text-white hover:bg-white/20 transition-all"
+                        className="p-2 rounded-md border border-white/20 transition-all text-white bg-white/10 hover:bg-white/20"
                         title="Copy"
                       >
                         <Copy className="w-4 h-4" />
                       </button>
                       <select
-                        className="text-xs text-white bg-white/5 border border-white/20 rounded-md px-2 py-1 backdrop-blur-sm"
+                        className="text-white text-xs bg-black/20 border border-white/20 rounded-md px-2 py-1 backdrop-blur-sm"
                         value={selectedPlatform}
                         onChange={(e) => handlePlatformChange(e.target.value)}
                       >
@@ -175,7 +196,7 @@ function App() {
                         href={platformUrls[selectedPlatform]}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs text-white bg-white/10 hover:bg-white/20 px-3 py-1 rounded-md border border-white/20 transition-all"
+                        className="text-white text-xs bg-white/10 hover:bg-white/20 px-3 py-1 rounded-md border border-white/20 transition-all"
                       >
                         🔍 Search
                       </a>
