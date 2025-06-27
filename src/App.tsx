@@ -112,7 +112,7 @@ function App() {
       </div>
 
       {showResults && (
-        <div className="absolute bottom-0 left-0 w-full z-10 p-4">
+        <div className="relative w-full z-10 p-4 mt-12">
           <div className="bg-black/30 backdrop-blur-md border border-white/10 rounded-2xl p-6 max-w-4xl mx-auto text-white">
             <h3 className="text-lg md:text-xl font-semibold mb-4 flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-yellow-400" />
