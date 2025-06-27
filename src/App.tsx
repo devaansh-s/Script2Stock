@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ChromeGrid } from "@/components/ui/ChromeGrid";
 import { Sparkles, Copy } from 'lucide-react';
 import { ParticleButton } from "@/components/ui/particle-button";
@@ -54,7 +54,7 @@ function App() {
 
   return (
     <div
-      className="relative min-h-screen w-full overflow-x-hidden bg-black text-white"
+      className="relative min-h-screen w-full overflow-hidden"
       onMouseMove={(e) => updatePointerFromEvent(e.clientX, e.clientY)}
       onTouchStart={(e) => {
         if (e.touches.length > 0) {
@@ -69,29 +69,27 @@ function App() {
         }
       }}
     >
+      {/* ChromeGrid Background */}
       <div className="fixed inset-0 -z-10 pointer-events-none">
         <ChromeGrid pointer={pointer} />
       </div>
 
-
-      {/* Main Content */}
-      <div className="flex flex-col justify-center items-center px-4 pt-28 md:pt-36 pb-12 w-full">
-        <h1 className="text-4xl md:text-6xl font-light tracking-widest text-white mb-4 text-center">
+      {/* Title, Subtitle, Input */}
+      <div className="absolute z-10 left-1/2 -translate-x-1/2 top-[40%] -translate-y-1/2 pointer-events-none flex flex-col justify-center items-center p-4 w-full">
+        <h1 className="text-4xl md:text-6xl font-light tracking-widest text-white pointer-events-none mb-4 text-center">
           Script2Stock
         </h1>
-        <p className="text-sm md:text-base text-white/70 font-mono tracking-wide mb-6 text-center max-w-md">
+        <p className="text-sm md:text-base text-white/70 font-mono tracking-wide pointer-events-none mb-6 text-center max-w-md">
           Video Scripts to Stock Footage Keywords
         </p>
-
-        <div className="w-full max-w-2xl space-y-4">
+        <div className="w-full max-w-2xl pointer-events-auto">
           <textarea
             value={script}
             onChange={(e) => setScript(e.target.value)}
             placeholder="Paste your video script here..."
             className="w-full h-40 p-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white placeholder-white/50 resize-none focus:outline-none focus:ring-2 focus:ring-white/40"
           />
-
-          <div className="flex justify-center">
+          <div className="flex justify-center mt-4">
             <ParticleButton
               onClick={handleGenerate}
               disabled={isGenerating}
@@ -108,26 +106,12 @@ function App() {
               )}
             </ParticleButton>
           </div>
-
-          {/* Overlay Frequency Dropdown */}
-          <div className="text-sm text-white/70 font-mono flex justify-center items-center gap-2 pt-2">
-            Overlay Frequency:
-            <select
-              value={overlayFrequency}
-              onChange={(e) => setOverlayFrequency(e.target.value as 'low' | 'medium' | 'high')}
-              className="bg-black border border-white/20 rounded-md px-2 py-1 text-white text-xs backdrop-blur-sm"
-            >
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-            </select>
-          </div>
         </div>
       </div>
 
       {/* Results Section */}
       {showResults && (
-        <div className="relative w-full z-10 px-4 pb-12">
+        <div className="relative w-full z-10 p-4 mt-[60vh] sm:mt-[50vh]">
           <div className="bg-black/30 backdrop-blur-md border border-white/10 rounded-2xl p-6 max-w-4xl mx-auto text-white">
             <h3 className="text-lg md:text-xl font-semibold mb-4 flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-yellow-400" />
