@@ -54,7 +54,7 @@ function App() {
 
   return (
     <div
-      className="relative min-h-screen w-full overflow-hidden"
+      className="relative min-h-screen w-full overflow-x-hidden bg-black text-white"
       onMouseMove={(e) => updatePointerFromEvent(e.clientX, e.clientY)}
       onTouchStart={(e) => {
         if (e.touches.length > 0) {
@@ -69,27 +69,29 @@ function App() {
         }
       }}
     >
-      {/* 3D Background */}
-      <div className="absolute inset-0 z-0">
+      {/* Background Grid */}
+      <div className="absolute inset-0 -z-10">
         <ChromeGrid pointer={pointer} />
       </div>
 
-      {/* Title & Input */}
-      <div className="absolute z-10 left-1/2 -translate-x-1/2 top-[40%] -translate-y-1/2 pointer-events-none flex flex-col justify-center items-center p-4 w-full">
-        <h1 className="text-4xl md:text-6xl font-light tracking-widest text-white pointer-events-none mb-4 text-center">
+      {/* Main Content */}
+      <div className="flex flex-col justify-center items-center px-4 pt-28 md:pt-36 pb-12 w-full">
+        <h1 className="text-4xl md:text-6xl font-light tracking-widest text-white mb-4 text-center">
           Script2Stock
         </h1>
-        <p className="text-sm md:text-base text-white/70 font-mono tracking-wide pointer-events-none mb-6 text-center max-w-md">
+        <p className="text-sm md:text-base text-white/70 font-mono tracking-wide mb-6 text-center max-w-md">
           Video Scripts to Stock Footage Keywords
         </p>
-        <div className="w-full max-w-2xl pointer-events-auto">
+
+        <div className="w-full max-w-2xl space-y-4">
           <textarea
             value={script}
             onChange={(e) => setScript(e.target.value)}
             placeholder="Paste your video script here..."
             className="w-full h-40 p-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white placeholder-white/50 resize-none focus:outline-none focus:ring-2 focus:ring-white/40"
           />
-          <div className="flex justify-center mt-4">
+
+          <div className="flex justify-center">
             <ParticleButton
               onClick={handleGenerate}
               disabled={isGenerating}
@@ -105,14 +107,27 @@ function App() {
                 <>Generate Keywords</>
               )}
             </ParticleButton>
+          </div>
 
-
+          {/* Overlay Frequency Dropdown */}
+          <div className="text-sm text-white/70 font-mono flex justify-center items-center gap-2 pt-2">
+            Overlay Frequency:
+            <select
+              value={overlayFrequency}
+              onChange={(e) => setOverlayFrequency(e.target.value as 'low' | 'medium' | 'high')}
+              className="bg-black border border-white/20 rounded-md px-2 py-1 text-white text-xs backdrop-blur-sm"
+            >
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
           </div>
         </div>
       </div>
 
+      {/* Results Section */}
       {showResults && (
-        <div className="relative w-full z-10 p-4 mt-12">
+        <div className="relative w-full z-10 px-4 pb-12">
           <div className="bg-black/30 backdrop-blur-md border border-white/10 rounded-2xl p-6 max-w-4xl mx-auto text-white">
             <h3 className="text-lg md:text-xl font-semibold mb-4 flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-yellow-400" />
@@ -123,19 +138,19 @@ function App() {
                 const keywordsOnly = line.split(']').slice(1).join(']').trim();
                 const encodedSearch = encodeURIComponent(keywordsOnly);
                 const selectedPlatform = platformSelections[idx] || 'storyblocks';
-      
+
                 const platformUrls: Record<string, string> = {
                   storyblocks: `https://www.storyblocks.com/all-video/search/${encodedSearch}?search-origin=search_bar`,
                   pexels: `https://www.pexels.com/search/videos/${encodedSearch}/`,
                   pixabay: `https://pixabay.com/videos/search/${encodedSearch}/`,
                 };
-      
+
                 const handlePlatformChange = (newPlatform: string) => {
                   const updatedSelections = [...platformSelections];
                   updatedSelections[idx] = newPlatform;
                   setPlatformSelections(updatedSelections);
                 };
-      
+
                 return (
                   <div
                     key={idx}
