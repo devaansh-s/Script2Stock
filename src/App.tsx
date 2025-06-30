@@ -75,6 +75,18 @@ function App() {
         }
       }}
     >
+      <a
+      href="https://your-link.com"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="fixed top-4 right-4 z-50 animate-badge-float"
+      >
+        <img
+          src="/badge.png"
+          alt="Badge"
+          className="h-10 w-auto transition-transform duration-300 ease-in-out transform hover:scale-110 hover:rotate-1 hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+        />
+      </a>
       {/* 3D Background */}
       <div className="absolute inset-0 z-0">
         <ChromeGrid pointer={pointer} />
