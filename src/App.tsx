@@ -84,7 +84,7 @@ function App() {
         <img
           src="/badge.png"
           alt="Badge"
-          className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto transition-transform duration-300 ease-in-out transform hover:scale-110 hover:rotate-1 hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+          className="h-14 sm:h-16 md:h-20 lg:h-24 w-auto transition-transform duration-300 ease-in-out transform hover:scale-110 hover:rotate-1 hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
         />
       </a>
 
